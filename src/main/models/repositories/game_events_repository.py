@@ -4,7 +4,7 @@ class GameEventsRepository:
     def __init__(self, conn: Connection) -> None:
         self.__conn = conn
 
-    def game_start(self, body: dict) -> dict:
+    def start_new_game(self, body: dict) -> None:
         cursor = self.__conn.cursor()
         cursor.execute('''
         INSERT INTO games (
@@ -22,11 +22,30 @@ class GameEventsRepository:
             body['game_mode_id'],
             "aberto"
             ))
-        cursor.commit()
+        self.__conn.commit()
 
-    def game_end(self, game_id: str) -> dict:
+    def end_game(self, game_id: str) -> None:
         cursor = self.__conn.cursor()
         cursor.execute('''
         UPDATE games SET game_status = ?
         WHERE game_id = ?
         ''', ("fechado", game_id))
+        self.__conn.commit()
+
+    def get_game(self, game_id: str) -> dict:
+        cursor = self.__conn.cursor()
+        cursor.execute('''
+        SELECT * FROM games
+        WHERE game_id = ?
+        ''', (game_id))
+        game = cursor.fetchone()
+
+        return game
+
+    def game_score_update(self, game_id: str, new_score: int) -> None:
+        cursor = self.__conn.cursor()
+        cursor.execute('''
+        UPDATE games SET game_score = ?
+        WHERE game_id = ?
+        ''', (new_score, game_id))
+        self.__conn.commit()
