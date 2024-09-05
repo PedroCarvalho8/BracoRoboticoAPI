@@ -37,7 +37,7 @@ class GameEventsRepository:
         cursor.execute('''
         SELECT * FROM games
         WHERE game_id = ?
-        ''', (game_id))
+        ''', (game_id,))
         game = cursor.fetchone()
 
         return game
