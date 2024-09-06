@@ -42,8 +42,6 @@ def get_game(game_id):
 
     response = game_manager.get_game(str(game_id))
 
-    message_queue.put(f"Novo evento para o jogo {game_id}")
-
     return jsonify(response['body']), response['status_code']
 
 
