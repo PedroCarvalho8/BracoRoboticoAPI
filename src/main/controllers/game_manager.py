@@ -1,4 +1,4 @@
-from src.main.models.repositories.game_events_repository import GameEventsRepository
+from src.models.repositories.game_events_repository import GameEventsRepository
 
 import uuid
 
