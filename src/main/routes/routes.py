@@ -65,7 +65,14 @@ def testar_jogo():
     message_queue.put("Teste iniciado")
     conn = db_connection_handler.get_connection()
     jogo = GameHandler(GameEventsRepository(conn))
-    jogo.game_handle(10)
+
+    conn = db_connection_handler.get_connection()
+    game_events_repository = GameEventsRepository(conn)
+    game_manager = GameManager(game_events_repository)
+    game = game_manager.start_game(request.json)
+    game_id = game.get('body').get('game_id')
+
+    jogo.game_handle(game_id)
 
     return jsonify({
         'message': "Teste finalizado!"
