@@ -35,7 +35,6 @@ class GameHandler:
 
     def game_handle(self, game_id: str) -> None:
         game_infos = self.__game_events_repository.get_game(game_id = game_id)
-        message_queue.put("!!!GAME INFOS!!!")
         message_queue.put(game_infos)
         desafios_disponiveis = self.__desafios.copy()
         max_rounds = 5
