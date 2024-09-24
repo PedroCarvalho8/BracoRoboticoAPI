@@ -2,4 +2,4 @@
 .pytest_cache
 env
 .vscode
-.ide
+.idea
