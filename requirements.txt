@@ -1,3 +1,7 @@
 pytest
 flask
 flask-sock
+opencv-python
+mediapipe
+serial
+numpy
