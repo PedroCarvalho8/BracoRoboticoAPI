@@ -1,4 +1,4 @@
-from queue import Queue
+import multiprocessing
 
-desafios_todo = Queue()
-desafios_completed = Queue()
+# desafios_todo = multiprocessing.Queue()
+# desafios_completed = multiprocessing.Queue()
