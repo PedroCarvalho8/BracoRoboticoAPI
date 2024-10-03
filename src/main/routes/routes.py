@@ -1,21 +1,22 @@
+
 from flask import jsonify, Blueprint, request
 from flask_sock import Sock
+import multiprocessing as mp
 
 from src.main.controllers.game_manager import GameManager
 from src.models.repositories.game_events_repository import GameEventsRepository
 
 from src.models.settings.db_connection_handler import db_connection_handler
 
-from src.main.queues.message_queue import message_queue
-from src.main.queues.desafios_queues import desafios_completed, desafios_todo
-
 from src.main.controllers.game_handler import GameHandler
 
-import json
+from src.main.readers.handReader import ler_mao
+
+import multiprocessing
 
 game_routes_bp = Blueprint("game_routes", __name__)
 
-
+message_queue = multiprocessing.Queue()
 
 @game_routes_bp.route("/startnewgame", methods=["POST"])
 def start_game():
@@ -52,9 +53,6 @@ def get_game(game_id):
 
 @game_routes_bp.route("/completardesafio", methods=["GET"])
 def completar_desafio_atual():
-    if not desafios_todo.empty():
-        desafio = desafios_todo.get()
-        desafios_completed.put(desafio)
 
     return jsonify({
         'message': "Desafio concluído!"
@@ -62,17 +60,29 @@ def completar_desafio_atual():
 
 @game_routes_bp.route("/testarjogo", methods=["GET"])
 def testar_jogo():
+    desafios_todo = multiprocessing.Queue()
+    desafios_completed = multiprocessing.Queue()
+    game_comu_queue = multiprocessing.Queue()
+    global message_queue
+
+
     message_queue.put("Teste iniciado")
-    conn = db_connection_handler.get_connection()
-    jogo = GameHandler(GameEventsRepository(conn))
+    jogo = GameHandler()
 
     conn = db_connection_handler.get_connection()
     game_events_repository = GameEventsRepository(conn)
     game_manager = GameManager(game_events_repository)
-    game = game_manager.start_game(request.json)
+    game = game_manager.start_game(body={})
     game_id = game.get('body').get('game_id')
 
-    jogo.game_handle(game_id)
+    process_ler = mp.Process(target=ler_mao, args=(desafios_todo, desafios_completed, game_comu_queue))
+    process_game = mp.Process(target=jogo.game_handle, args=(game_id, desafios_todo, desafios_completed, message_queue, game_comu_queue))
+
+    process_ler.start()
+    process_game.start()
+
+    process_ler.join()
+    process_game.join()
 
     return jsonify({
         'message': "Teste finalizado!"
@@ -80,6 +90,7 @@ def testar_jogo():
 
 @Sock.route(self=Sock(), bp=game_routes_bp, path='/teste')
 def websocket_handler(ws):
+    global message_queue
     while True:
          if not message_queue.empty():
             message = message_queue.get()

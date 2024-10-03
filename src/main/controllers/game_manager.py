@@ -12,8 +12,8 @@ class GameManager:
             game_id = str(uuid.uuid4())
             game_infos = {
                 "game_id": game_id,
-                "game_player_name": body["game_player_name"] if body["game_player_name"] else None,
-                "game_mode_id": body['game_mode_id']
+                "game_player_name": body.get('game_player_name', None),
+                "game_mode_id": body.get('gme_mode_id', 1)
             }
 
             self.__game_events_repository.start_new_game(body=game_infos)
