@@ -11,28 +11,33 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
     desafios_mapper = {
         'A': {
             'esperado': [range(80, 101), range(95, 101), range(0, 10), range(0, 10), range(0, 10)],
-            'desc': "L"
+            'desc': "L",
+            'to_hand': [100, 100, 0, 0, 0]
         },
         'B': {
             'esperado': [range(0, 101), range(95, 101), range(0, 10), range(0, 10), range(95, 101)],
-            'desc': "Rock and Roll"
+            'desc': "Rock and Roll",
+            'to_hand': [0, 100, 0, 0, 100]
         },
         'C': {
             'esperado': [range(0, 101), range(0, 15), range(90, 101), range(0, 15), range(0, 15)],
-            'desc': "Dedo do meio"
+            'desc': "Dedo do meio",
+            'to_hand': [0, 0, 100, 0, 100]
         },
         'D': {
             'esperado': [range(0, 101), range(0, 10), range(0, 10), range(0, 10), range(95, 101)],
-            'desc': "Chá"
+            'desc': "Chá",
+            'to_hand': [0, 0, 0, 0, 100]
         },
         'E': {
-            'esperado': [range(0, 101), range(15, 101), range(15, 101), range(0, 14), range(0, 14)],
-            'desc': "Paz"
+            'esperado': [range(0, 101), range(60, 101), range(60, 101), range(0, 14), range(0, 14)],
+            'desc': "Paz",
+            'to_hand': [0, 100, 100, 0, 0]
         }
     }
 
     # Inicializa a comunicação serial -> UTILIZE A PORTA 'COM' CORRESPONDENTE
-    # arduino = serial.Serial(port='COM6', baudrate=9600, timeout=0.1)
+    arduino = serial.Serial(port='COM6', baudrate=9600, timeout=0.1)
 
     # Inicializa o MediaPipe
     mp_hands = mp.solutions.hands
@@ -72,9 +77,9 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
         return distances
 
 
-    # def sendList(aberturaDedos: list, arduino: serial.Serial) -> None:
-    #     mensagem = ','.join(map(str, aberturaDedos))
-    #     arduino.write((mensagem + '\n').encode())
+    def sendList(aberturaDedos: list, arduino: serial.Serial) -> None:
+        mensagem = ','.join(map(str, aberturaDedos))
+        arduino.write((mensagem + '\n').encode())
 
 
     # Capturando a imagem da webcam
@@ -130,10 +135,10 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
                 finger_opening = calc_opening_dist(landmarks)
 
                 # Controle para enviar dados a cada intervalo especificado
-                # current_time = time.time()
-                # if current_time - last_sent_time > send_interval:
-                #     sendList(finger_opening, arduino)
-                #     last_sent_time = current_time
+                current_time = time.time()
+                if current_time - last_sent_time > send_interval:
+                    sendList(finger_opening, arduino)
+                    last_sent_time = current_time
 
                 # Exibir os valores de abertura dos dedos na tela
                 for idx, abertura in enumerate(finger_opening):
@@ -168,6 +173,7 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
                     desafios = message.get('body').get('desafios')
                     for desafio in desafios:
                         print(desafios_mapper.get(desafio.get('nome')).get('desc'))
+                        sendList(desafios_mapper.get(desafio.get('nome')).get('to_hand'), arduino)
                         time.sleep(0.4)
                     time.sleep(len(desafios)*0.4 + 1)
                     print('\n'*15)
