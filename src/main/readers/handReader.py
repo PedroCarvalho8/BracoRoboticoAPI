@@ -37,7 +37,7 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
     }
 
     # Inicializa a comunicação serial -> UTILIZE A PORTA 'COM' CORRESPONDENTE
-    arduino = serial.Serial(port='COM6', baudrate=9600, timeout=0.1)
+    # arduino = serial.Serial(port='COM6', baudrate=9600, timeout=0.1)
 
     # Inicializa o MediaPipe
     mp_hands = mp.solutions.hands
@@ -137,7 +137,7 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
                 # Controle para enviar dados a cada intervalo especificado
                 current_time = time.time()
                 if current_time - last_sent_time > send_interval:
-                    sendList(finger_opening, arduino)
+                    # sendList(finger_opening, arduino)
                     last_sent_time = current_time
 
                 # Exibir os valores de abertura dos dedos na tela
@@ -173,7 +173,7 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
                     desafios = message.get('body').get('desafios')
                     for desafio in desafios:
                         print(desafios_mapper.get(desafio.get('nome')).get('desc'))
-                        sendList(desafios_mapper.get(desafio.get('nome')).get('to_hand'), arduino)
+                        # sendList(desafios_mapper.get(desafio.get('nome')).get('to_hand'), arduino)
                         time.sleep(2)
                     print('\n'*15)
                     flag_continuar = True
