@@ -89,7 +89,7 @@ class GameHandler:
                 }
                 message_queue.put(message)
                 game_comu_queue.put(message)
-                time.sleep(len(self.__desafios_selecionados) * 1)
+                time.sleep(len(self.__desafios_selecionados) * 2)
                 for desafio in self.__desafios_selecionados:
                     if datetime.now() > tempo_max:
                         self.__flag_acabou_tempo = True

@@ -174,7 +174,7 @@ def ler_mao(desafios_todo, desafios_completed, game_comu_queue):
                     for desafio in desafios:
                         print(desafios_mapper.get(desafio.get('nome')).get('desc'))
                         sendList(desafios_mapper.get(desafio.get('nome')).get('to_hand'), arduino)
-                        time.sleep(1)
+                        time.sleep(2)
                     print('\n'*15)
                     flag_continuar = True
                 if message.get('body').get('message') == "desafio_all_ended":
