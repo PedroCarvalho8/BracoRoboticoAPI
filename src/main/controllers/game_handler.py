@@ -144,3 +144,14 @@ class GameHandler:
 
         game_events_repository.game_score_update(game_id=game_id, new_score=final_score)
         game_events_repository.end_game(game_id=game_id)
+
+        placar  = game_events_repository.get_high_scores()
+
+        message = {
+            'body': {
+                'message': "game_placar",
+                'placar': placar
+            }
+        }
+
+        message_queue.put(message)

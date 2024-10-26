@@ -58,8 +58,8 @@ def completar_desafio_atual():
         'message': "Desafio concluído!"
     }), 200
 
-@game_routes_bp.route("/testarjogo", methods=["GET"])
-def testar_jogo():
+@game_routes_bp.route("/iniciarjogo/<player_name>", methods=["GET"])
+def testar_jogo(player_name):
     desafios_todo = multiprocessing.Queue()
     desafios_completed = multiprocessing.Queue()
     game_comu_queue = multiprocessing.Queue()
@@ -72,7 +72,9 @@ def testar_jogo():
     conn = db_connection_handler.get_connection()
     game_events_repository = GameEventsRepository(conn)
     game_manager = GameManager(game_events_repository)
-    game = game_manager.start_game(body={})
+    game = game_manager.start_game(body={
+        "game_player_name": player_name,
+    })
     game_id = game.get('body').get('game_id')
 
     process_ler = mp.Process(target=ler_mao, args=(desafios_todo, desafios_completed, game_comu_queue))

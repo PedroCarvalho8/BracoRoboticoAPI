@@ -49,3 +49,15 @@ class GameEventsRepository:
         WHERE game_id = ?
         ''', (new_score, game_id))
         self.__conn.commit()
+
+    def get_high_scores(self):
+        cursor = self.__conn.cursor()
+        cursor.execute('''
+        select game_player_name, game_score from games
+        where game_score > 0
+        order by game_score desc
+        limit 10
+        ''')
+        scores = cursor.fetchall()
+
+        return scores
