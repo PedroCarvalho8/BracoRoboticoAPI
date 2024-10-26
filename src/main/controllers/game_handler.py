@@ -52,10 +52,12 @@ class GameHandler:
         max_rounds = 3
         message_queue.put(f"Maximo de rodadas: {max_rounds}")
         score_por_rodada = 10
+        rodada = 0
         desafio_anterior = None
 
         for rodada in range(max_rounds):
             if not self.__flag_acabou_tempo:
+                rodada += 1
                 if len(desafios_disponiveis) == 0:
                     desafios_disponiveis = self.__desafios.copy()
 
@@ -76,12 +78,13 @@ class GameHandler:
                     'body': {
                         'status': "game_open",
                         'message': "desafios_list",
+                        'rodada': rodada,
                         'desafios': self.__desafios_selecionados,
                     }
                 }
                 message_queue.put(message)
                 game_comu_queue.put(message)
-                time.sleep(len(self.__desafios_selecionados) * 0.4 + 1)
+                time.sleep(len(self.__desafios_selecionados) * 1)
                 for desafio in self.__desafios_selecionados:
                     if not self.__flag_acabou_tempo:
                         self.desafio_atual = desafio

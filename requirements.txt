@@ -3,5 +3,5 @@ flask
 flask-sock
 opencv-python
 mediapipe
-serial
+pyserial
 numpy
