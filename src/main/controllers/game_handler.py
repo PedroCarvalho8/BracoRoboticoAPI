@@ -54,6 +54,7 @@ class GameHandler:
         score_por_rodada = 10
         rodada = 0
         desafio_anterior = None
+        tempo_restante = timedelta(seconds=0)
 
         for rodada in range(max_rounds):
             if not self.__flag_acabou_tempo:
@@ -63,6 +64,9 @@ class GameHandler:
 
                 desafio_da_rodada = random.choice(range(len(desafios_disponiveis)))
                 self.__desafios_selecionados.append(desafios_disponiveis.pop(desafio_da_rodada))
+
+                tempo_da_rodada = timedelta(seconds=len(self.__desafios_selecionados)*5 + 2) + tempo_restante
+                tempo_max = datetime.now() + tempo_da_rodada
 
                 for desafio in self.__desafios:
                     if desafio not in desafios_disponiveis:
@@ -79,6 +83,7 @@ class GameHandler:
                         'status': "game_open",
                         'message': "desafios_list",
                         'rodada': rodada,
+                        'tempo': tempo_da_rodada,
                         'desafios': self.__desafios_selecionados,
                     }
                 }
@@ -86,15 +91,19 @@ class GameHandler:
                 game_comu_queue.put(message)
                 time.sleep(len(self.__desafios_selecionados) * 1)
                 for desafio in self.__desafios_selecionados:
+                    if datetime.now() > tempo_max:
+                        self.__flag_acabou_tempo = True
+                        break
                     if not self.__flag_acabou_tempo:
                         self.desafio_atual = desafio
                         desafios_todo.put(desafio)
                         while not desafio['status']:
-                            if datetime.now() >= self.__tempo_final:
+                            if datetime.now() > tempo_max:
                                 self.__flag_acabou_tempo = True
                                 break
                             if not(desafios_completed.empty()):
                                 desafios_completed.get()
+                                tempo_restante = tempo_max - datetime.now()
                                 time.sleep(0.2)
                                 print(".", end='')
                                 desafio['status'] = True
@@ -130,7 +139,7 @@ class GameHandler:
             game_comu_queue.put(message)
         else:
             tempo_restante = self.__tempo_final - datetime.now()
-            final_score = self.__score + int(self.__score * int(tempo_restante.total_seconds()) / 50)
+            final_score = self.__score
             message = {
                     'body': {
                         'status': "game_ended",
