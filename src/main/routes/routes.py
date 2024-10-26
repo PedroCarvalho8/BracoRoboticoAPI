@@ -59,6 +59,16 @@ def completar_desafio_atual():
         'message': "Desafio concluído!"
     }), 200
 
+@game_routes_bp.route("/placar", methods=["GET"])
+def placar():
+
+    conn = db_connection_handler.get_connection()
+    game_events_repository = GameEventsRepository(conn)
+
+    response = game_events_repository.get_high_scores()
+
+    return jsonify(response), 200
+
 @game_routes_bp.route("/iniciarjogo/<player_name>", methods=["GET"])
 def testar_jogo(player_name):
     desafios_todo = multiprocessing.Queue()
