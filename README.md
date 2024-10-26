@@ -1,3 +1,4 @@
+
 # 🦾 Projeto: Braço Robótico Controlado por Visão Computacional e Arduino
 
 Este projeto é um sistema de controle de um braço robótico impresso em 3D, utilizando gestos manuais reconhecidos por visão computacional e comunicação com Arduino. Foi desenvolvido para uma competição acadêmica e integra técnicas avançadas de visão computacional, aprendizado de máquina e controle de hardware.
@@ -39,20 +40,30 @@ Este projeto é um sistema de controle de um braço robótico impresso em 3D, ut
 │   │   │   └── routes.py             # Definição das rotas de API do jogo
 │   │   ├── server/                   # Servidor principal da aplicação
 │   │   │   └── __init__.py           # Inicialização do módulo do servidor
-│   │   ├── models/                   # Modelos de dados e repositórios
-│   │   │   ├── __init__.py           # Inicialização do módulo de modelos
-│   │   │   ├── repositories/         # Repositórios de acesso a dados
-│   │   │   │   ├── __init__.py       # Inicialização do módulo de repositórios
-│   │   │   │   └── game_events_repository.py # Classe para interações com o banco de dados
-│   │   │   └── settings/              # Configurações gerais do projeto
-│   │   │       ├── __init__.py       # Inicialização do módulo de configurações
-│   │   │       └── db_connection_handler.py # Manipulação de conexão com o banco de dados
-├── venv/                             # Ambiente virtual para dependências do projeto
-│   ├── .gitignore                    # Arquivo para ignorar arquivos no Git
-│   ├── requirements.txt              # Dependências do projeto
-│   ├── run.py                        # Script para execução do projeto
-│   └── storage.db                    # Banco de dados SQLite
+│   ├── models/                       # Modelos de dados e repositórios
+│   │   ├── repositories/             # Repositórios de acesso a dados
+│   │   │   ├── __init__.py           # Inicialização do módulo de repositórios
+│   │   │   └── game_events_repository.py # Classe para interações com o banco de dados
+│   │   ├── settings/                 # Configurações gerais do projeto
+│   │   │   ├── __init__.py           # Inicialização do módulo de configurações
+│   │   │   └── db_connection_handler.py # Manipulação de conexão com o banco de dados
+├── frontend/                         # Frontend desenvolvido em React
+│   └── src/                          # Código-fonte do frontend
+│       └── App.js                    # Componente principal do React
+├── .gitignore                        # Arquivo para ignorar arquivos no Git
+├── README.md                         # Documentação do projeto
+├── requirements.txt                  # Dependências do projeto
+├── run.py                            # Script para execução do projeto
+├── storage.db                        # Banco de dados SQLite
 ```
+
+---
+
+## 🖥️ Frontend - Tela Inicial
+
+Abaixo está a tela inicial do frontend da aplicação, desenvolvida com React. Nesta tela, o usuário pode selecionar o nível de dificuldade do jogo, inserir seu nome e iniciar uma nova partida, além de visualizar o placar geral.
+
+![Tela Inicial do Frontend](assets/MainMenu.png)
 
 ---
 
@@ -63,6 +74,7 @@ Este projeto é um sistema de controle de um braço robótico impresso em 3D, ut
 - **SQLite**: Banco de dados utilizado para persistência de dados.
 - **OpenCV e MediaPipe**: Para processamento de imagem e reconhecimento de gestos.
 - **Arduino**: Para controle físico do braço robótico.
+- **React**: Framework JavaScript utilizado no desenvolvimento do frontend.
 
 ---
 
@@ -93,5 +105,3 @@ Este projeto está sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 🤝 Contribuições
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir um *pull request* ou *issue*.
-
----
