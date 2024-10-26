@@ -54,7 +54,7 @@ class GameHandler:
         score_por_rodada = 10
         rodada = 0
         desafio_anterior = None
-        tempo_restante = timedelta(seconds=0)
+        tempo_restante = timedelta(seconds=4)
 
         for rodada in range(max_rounds):
             if not self.__flag_acabou_tempo:
@@ -65,7 +65,7 @@ class GameHandler:
                 desafio_da_rodada = random.choice(range(len(desafios_disponiveis)))
                 self.__desafios_selecionados.append(desafios_disponiveis.pop(desafio_da_rodada))
 
-                tempo_da_rodada = timedelta(seconds=len(self.__desafios_selecionados)*5 + 2) + tempo_restante
+                tempo_da_rodada = timedelta(seconds=len(self.__desafios_selecionados)*4 + 2) + tempo_restante
                 tempo_max = datetime.now() + tempo_da_rodada
 
                 for desafio in self.__desafios:
