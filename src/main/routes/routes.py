@@ -90,7 +90,7 @@ def testar_jogo(player_name):
         'message': "Teste finalizado!"
     }), 200
 
-@Sock.route(self=Sock(), bp=game_routes_bp, path='/teste')
+@Sock.route(self=Sock(), bp=game_routes_bp, path='/websocket')
 def websocket_handler(ws):
     global message_queue
     while True:
