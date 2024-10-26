@@ -49,7 +49,7 @@ class GameHandler:
         game_infos = game_events_repository.get_game(game_id = game_id)
         message_queue.put(game_infos)
         desafios_disponiveis = self.__desafios.copy()
-        max_rounds = 3
+        max_rounds = 100
         message_queue.put(f"Maximo de rodadas: {max_rounds}")
         score_por_rodada = 10
         rodada = 0
@@ -83,7 +83,7 @@ class GameHandler:
                         'status': "game_open",
                         'message': "desafios_list",
                         'rodada': rodada,
-                        'tempo': tempo_da_rodada,
+                        'tempo': int(tempo_da_rodada.total_seconds()),
                         'desafios': self.__desafios_selecionados,
                     }
                 }
