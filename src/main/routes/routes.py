@@ -1,3 +1,4 @@
+import json
 
 from flask import jsonify, Blueprint, request
 from flask_sock import Sock
@@ -95,5 +96,6 @@ def websocket_handler(ws):
     global message_queue
     while True:
          if not message_queue.empty():
-            message = message_queue.get()
-            ws.send(message)
+             message = message_queue.get()
+             message = json.dumps(message) if isinstance(message, dict) else message
+             ws.send(message)
