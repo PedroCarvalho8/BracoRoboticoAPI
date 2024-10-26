@@ -1,6 +1,7 @@
 pytest
 flask
 flask-sock
+flask-cors
 opencv-python
 mediapipe
 pyserial
